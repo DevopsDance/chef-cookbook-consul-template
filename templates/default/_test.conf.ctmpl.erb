@@ -1,0 +1,39 @@
+{{range services}} {{if .Tags | contains "http-service"}}{{if keyExists (printf "/%s.service.<%= node.chef_environment %>.nowthis.network/certificate" .Name)}}
+#########################################################
+# configuration of {{.Name}}
+#########################################################
+upstream protected-{{.Name}} {
+  least_conn;
+  {{range service .Name}}server {{.Address}}:{{.Port}} max_fails=3 fail_timeout=60 weight=1;
+  {{else}}server 127.0.0.1:65535;{{end}}
+}
+
+server {
+  listen 80;
+  server_name {{.Name}}.service.<%= node.chef_environment %>.nowthis.network;
+  return 302 https://$host$request_uri;
+}
+
+server {
+  listen 443;
+  ssl_certificate {{printf "/%s.service.<%= node.chef_environment %>.nowthis.network/certificate" .Name}};
+  ssl_certificate_key {{printf "/%s.service.<%= node.chef_environment %>.nowthis.network/key" .Name}};
+  server_name {{.Name}}.service.<%= node.chef_environment %>.nowthis.network;
+
+  charset utf-8;
+
+  # include customization files if exist
+  include /etc/nginx/customize/{{.Name}}-configuration-*.conf;
+
+  location @authorize {
+    include auth.conf;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_pass http://protected-{{.Name}};
+  }
+
+  try_files $uri @authorize;
+
+}
+{{end}}{{end}}{{end}}

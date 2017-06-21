@@ -1,0 +1,57 @@
+---
+
+driver:
+  name: dokken
+  chef_image: devopsdance/chef
+  privileged: true
+
+transport:
+  name: dokken
+
+provisioner:
+  name: dokken
+
+verifier:
+  name: inspec
+
+platform_driver_defaults: &platform_driver_defaults
+  pid_one_command: /bin/systemd
+  intermediate_instructions:
+    - RUN apt-get update -y
+    - RUN rm -v /usr/sbin/policy-rc.d
+    - RUN apt-get install net-tools -y
+
+platforms:
+  - name: ubuntu-16.04
+    driver:
+      image: ubuntu:xenial
+      <<: *platform_driver_defaults
+      pid_one_command: /sbin/init
+
+  - name: ubuntu-14.04
+    driver:
+      image: ubuntu:trusty
+      <<: *platform_driver_defaults
+      pid_one_command: /sbin/init
+
+  - name: debian-9
+    driver:
+      image: debian:stretch
+      <<: *platform_driver_defaults
+
+  - name: debian-8
+    driver:
+      image: debian:jessie
+      <<: *platform_driver_defaults
+
+suites:
+  - name: default-12
+    run_list:
+      - recipe[devopsdance-consul-template::_test]
+    driver:
+      chef_version: 12
+  - name: default-13
+    run_list:
+      - recipe[devopsdance-consul-template::_test]
+    driver:
+      chef_version: 13

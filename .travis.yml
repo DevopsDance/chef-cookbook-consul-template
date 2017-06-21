@@ -1,0 +1,10 @@
+---
+
+language: ruby
+dist: trusty
+services:
+  - docker
+
+script:
+  - bundle exec rake
+  - bundle exec kitchen test --concurrency 1 --color

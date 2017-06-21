@@ -1,0 +1,6 @@
+# Lockfiles
+Gemfile.lock
+Berksfile.lock
+
+# Kitchen directory
+.kitchen/

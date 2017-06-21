@@ -1,0 +1,23 @@
+# This file is managed by Chef.
+#
+<%
+def t_attr(t, key, quote=true)
+  return "#{key.to_s} = #{quote ? "\"#{t[key]}\"" : t[key]}" unless t[key].nil?
+end
+%>
+
+<% @templates.each do |template| -%>
+template {
+  <%= t_attr(template, :source) %>
+  <%= t_attr(template, :destination) %>
+  <%= t_attr(template, :contents) %>
+  <%= t_attr(template, :command) %>
+  <%= t_attr(template, :command_timeout) %>
+  <%= t_attr(template, :perms, false) %>
+  <%= t_attr(template, :backup, false) %>
+  <%= t_attr(template, :left_delimiter) %>
+  <%= t_attr(template, :right_delimiter) %>
+  <%= t_attr(template, :wait) %>
+}
+<% end  %>
+
