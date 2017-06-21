@@ -39,7 +39,7 @@ platforms:
       pid_one_command: /bin/systemd
       intermediate_instructions:
         - RUN apt-get update -y
-        - RUN apt-get install net-tools -y
+        - RUN apt-get install net-tools systemd -y
         - RUN rm -v /usr/sbin/policy-rc.d
 
   - name: debian-8
