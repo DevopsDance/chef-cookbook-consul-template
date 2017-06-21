@@ -14,35 +14,42 @@ provisioner:
 verifier:
   name: inspec
 
-platform_driver_defaults: &platform_driver_defaults
-  pid_one_command: /bin/systemd
-  intermediate_instructions:
-    - RUN apt-get update -y
-    - RUN rm -v /usr/sbin/policy-rc.d
-    - RUN apt-get install net-tools -y
-
 platforms:
   - name: ubuntu-16.04
     driver:
       image: ubuntu:xenial
-      <<: *platform_driver_defaults
       pid_one_command: /sbin/init
+      intermediate_instructions:
+        - RUN apt-get update -y
+        - RUN apt-get install net-tools -y
+        - RUN rm -v /usr/sbin/policy-rc.d
 
   - name: ubuntu-14.04
     driver:
       image: ubuntu:trusty
-      <<: *platform_driver_defaults
       pid_one_command: /sbin/init
+      intermediate_instructions:
+        - RUN apt-get update -y
+        - RUN apt-get install net-tools systemd -y
+        - RUN rm -v /usr/sbin/policy-rc.d
 
   - name: debian-9
     driver:
       image: debian:stretch
-      <<: *platform_driver_defaults
+      pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN apt-get update -y
+        - RUN apt-get install net-tools -y
+        - RUN rm -v /usr/sbin/policy-rc.d
 
   - name: debian-8
     driver:
       image: debian:jessie
-      <<: *platform_driver_defaults
+      pid_one_command: /bin/systemd
+      intermediate_instructions:
+        - RUN apt-get update -y
+        - RUN apt-get install net-tools -y
+        - RUN rm -v /usr/sbin/policy-rc.d
 
 suites:
   - name: default-12
