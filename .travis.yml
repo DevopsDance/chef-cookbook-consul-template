@@ -2,9 +2,10 @@
 
 language: ruby
 dist: trusty
+sudo: required
+group: edge
 services:
   - docker
-
 script:
   - bundle exec rake
   - bundle exec kitchen test --concurrency 1 --color
