@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/DevopsDance/chef-cookbook-consul-template.svg?branch=master)](https://travis-ci.org/DevopsDance/chef-cookbook-consul-template)
+
 # devopsdance-consul-template
 
 Install and configures Consul templates. This cookbook has been build on top of
