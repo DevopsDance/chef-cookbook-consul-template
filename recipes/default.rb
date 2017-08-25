@@ -52,20 +52,24 @@ file File.join(node['devopsdance-consul-template']['config_dir'], 'default.json'
   action :create
 end
 
-systemd_service 'consul-template' do
-  description 'Consul Template daemon.'
-  after %w(
-    network.target
-  )
-  install do
-    wanted_by 'multi-user.targer'
-  end
-  service do
-    user node['devopsdance-consul-template']['service_user']
-    group node['devopsdance-consul-template']['service_group']
-    exec_start "#{node['ark']['prefix_home']}/consul-template/consul-template -config #{node['devopsdance-consul-template']['config_dir']}"
-    exec_reload '/bin/kill -HUP $MAINPID'
-  end
+systemd_unit 'consul-template.service' do
+  content(
+    'Unit' => {
+      'Description' => 'Consul Template',
+      'After' => 'network.target',
+    },
+    'Install' => {
+      'WantedBy' => 'multi-user.target',
+    },
+    'Service' => {
+      'ExecStart' => "#{node['ark']['prefix_home']}/consul-template/consul-template -config #{node['devopsdance-consul-template']['config_dir']}",
+      'ExecReload' => '/bin/kill -HUP $MAINPID',
+    })
+  notifies :restart, 'service[consul-template]', :delayed
+  action [
+    :create,
+    :enable,
+  ]
 end
 
 service 'consul-template' do
