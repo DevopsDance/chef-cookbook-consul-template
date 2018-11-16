@@ -62,7 +62,8 @@ systemd_unit 'consul-template.service' do
       'WantedBy' => 'multi-user.target',
     },
     'Service' => {
-      'ExecStart' => "#{node['ark']['prefix_home']}/consul-template/consul-template -config #{node['devopsdance-consul-template']['config_dir']}",
+      'ExecStart' => "#{node['ark']['prefix_home']}/consul-template/consul-template -config #{node['devopsdance-consul-template']['config_dir']} #{node['devopsdance-consul-template']['extra_params']}",
+      'Restart' => 'always',
       'ExecReload' => '/bin/kill -HUP $MAINPID',
     })
   notifies :restart, 'service[consul-template]', :delayed
