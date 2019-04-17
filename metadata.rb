@@ -3,7 +3,7 @@ maintainer 'DevopsDance'
 maintainer_email 'team@devops.dance'
 license 'Apache-2.0'
 description 'Installs and configures consul-template daemon'
-version '1.1.0'
+version '1.1.1'
 source_url 'https://github.com/DevopsDance/chef-cookbook-consul-template'
 issues_url 'https://github.com/DevopsDance/chef-cookbook-consul-template/issues'
 
