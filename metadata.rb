@@ -9,6 +9,7 @@ issues_url 'https://github.com/DevopsDance/chef-cookbook-consul-template/issues'
 
 chef_version '~> 12'
 chef_version '~> 13'
+chef_version '~> 14'
 
 depends 'ubuntu'
 depends 'apt'
